@@ -63,7 +63,7 @@ figure(1)
 imshow(imr, cmap="gray")
 
 figure(2)
-imshow(img, tcmap="gray")
+imshow(img, cmap="gray")
 
 figure(3)
 imshow(imb, cmap="gray")
