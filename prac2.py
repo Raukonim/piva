@@ -94,7 +94,7 @@ imshow(imper, cmap="gray")
 #suma = L.cumsum()
 hist=histogram(L, L.min(), L.max(),256)
 suma=hist.cumsum()
-eq=suma[uint8(L)]/255
+eq=255*suma[uint8(L)]/suma[uint8(L)].max()
 
 
 subplot(3,3,8)
@@ -136,7 +136,7 @@ eqg=sumg[uint8(eyeg)]
 eqb=sumb[uint8(eyeb)]
 
 dimen=eye.shape
-eqc=zeros([dimen[0], dime[1], dimen[2]])
+eqc=zeros([dimen[0], dimen[1], dimen[2]])
 
 eqc[:,:,0]=uint8(eqr)
 eqc[:,:,1]=uint8(eqg)

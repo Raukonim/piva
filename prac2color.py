@@ -8,6 +8,9 @@ Created on Wed Feb 25 11:28:38 2015
 from pylab import *
 from scipy.ndimage.measurements import histogram
 
+close('all')
+interactive(True)
+
 eye=imread("eye.jpg")
 
 # Creem tres imatges BN una amb cada capa
@@ -28,9 +31,9 @@ sumr=histr.cumsum()
 sumg=histg.cumsum()
 sumb=histb.cumsum()
 
-eqr=255*sumr[eyer]/sumr[eyer].max()
-eqg=255*sumg[eyeg]/sumg[eyeg].max()
-eqb=255*sumb[eyeb]/sumb[eyeb].max()
+eqr=255*(double(sumr[eyer])/double(sumr[eyer]).max())
+eqg=255*(double(sumg[eyeg])/double(sumg[eyeg]).max())
+eqb=255*(double(sumb[eyeb])/double(sumb[eyeb]).max())
 
 
 dimen=eye.shape
@@ -45,11 +48,34 @@ imshow(uint8(eye))
 
 figure(1)
 imshow(uint8(eqc))
-
+eqc=uint8(eqc)
 hist3=histogram(eqc, eqc.min(), eqc.max(),256)
 figure(2)
 
-plt.plot(hist3)
+plt.plot(histr, color="red")
+plt.plot(histg, color="green")
+plt.plot(histb, color="blue")
+plt.plot(hist3, color="black")
 
+"""
 figure(3)
-plt.plot(hist3.cumsum())
+plt.plot(histr.cumsum(), color="red")
+plt.plot(histg.cumsum(), color="green")
+plt.plot(histb.cumsum(), color="blue")
+"""
+histr2=histogram(eqr ,eqr.min(), eqr.max(), 256)
+histg2=histogram(eqg ,eqg.min(), eqg.max(), 256)
+histb2=histogram(eqb ,eqb.min(), eqb.max(), 256)
+"""
+figure(4)
+
+plt.plot(histr2, color="red")
+plt.plot(histg2, color="green")
+plt.plot(histb2, color="blue")
+plt.plot(hist3, color="black")
+"""
+figure(5)
+plt.plot(histr2.cumsum(), color="red")
+plt.plot(histg2.cumsum(), color="green")
+plt.plot(histb2.cumsum(), color="blue")
+plt.plot(hist3.cumsum(), color="black")
