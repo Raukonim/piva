@@ -33,5 +33,13 @@ secreta_col[:,:,1]=secreta_4
 secreta_col[:,:,2]=secreta_6
 secreta_col/=3
 
+esteg_color+=secreta_col
 
-show=
+
+show=(esteg_color%4)*3
+show_r=show[:,:,0]
+show_g=show[:,:,1]*4
+show_b=show[:,:,2]*16
+
+dim=show.shape
+show_sec=(show_r+show_g+show_b)
