@@ -19,18 +19,19 @@ im=double(imread("eye.jpg"))
 esteg_color=im-(im%4)
 
 size=shape(im)
-secreta=imresize(double(lena()/64), size)
+secreta=imresize(lena(), size)
 #secreta/=4
 
 dimen=im.shape
 secreta_col=zeros([dimen[0], dimen[1], dimen[2]])
 secreta_2=(secreta%4)
-secreta_4=(secreta%16)/4
-secreta_6=(secreta%64)/16
+secreta_4=(secreta%16-secreta_2)/4
+secreta_6=(secreta%64-secreta_4)/16
+secreta_8=(secreta%256-secreta_6)/64
 
-secreta_col[:,:,0]=secreta_2
-secreta_col[:,:,1]=secreta_4
-secreta_col[:,:,2]=secreta_6
+secreta_col[:,:,0]=secreta_4
+secreta_col[:,:,1]=secreta_6
+secreta_col[:,:,2]=secreta_8
 secreta_col/=3
 
 esteg_color+=secreta_col
@@ -43,3 +44,15 @@ show_b=show[:,:,2]*16
 
 dim=show.shape
 show_sec=(show_r+show_g+show_b)
+
+figure(0)
+subplot(2,2,1)
+imshow(uint8(im))
+subplot(2,2,2)
+imshow(uint8(esteg_color))
+subplot(2,2,3)
+imshow(secreta, cmap="gray")
+subplot(2,2,4)
+imshow(show_sec, cmap="gray")
+
+#ssim(uint8(L), uint8(binar), win_size=i)
