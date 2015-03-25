@@ -21,4 +21,6 @@ size=shape(eye)
 ascii=[ord(i) for i in lectura]
 
 
-asciimat=reshape(ascii, (600,600))
+asciiarr=asarray(ascii, dtype="uint8")
+fill=zeros(size[0]*size[1]-len(asciiarr))
+ascimat=concatenate([asciiarr], [fill])
