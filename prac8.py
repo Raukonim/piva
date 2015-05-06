@@ -188,3 +188,16 @@ imshow(pic_conv_op2, cmap='gray')
 subplot(1,3,3)
 title("opcio3")
 imshow(pic_conv_op3, cmap='gray')
+
+
+
+L1=convolve(pic2, [[-1,0,1],[-2,0,2],[-1,0,1]])
+L2=convolve(pic2, [[1,2,1],[0,0,0],[-1,-2,-1]])
+sobel=sqrt(L1*L1+L2*L2)
+figure()
+imshow(sobel, cmap='gray')
+
+
+R1=convolve(pic2, [[1,0],[0,-1]])
+R2=convolve(pic2, [[0,1],[-1,0]])
+roberts
