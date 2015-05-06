@@ -39,43 +39,65 @@ x,y = meshgrid(linspace(-1,1,dimen[0]), linspace(-1,1,dimen[1]))
 
 uv=x*x+y*y
 
-four_camera=fftshift(fft2(pic))
+four_pic=fftshift(fft2(pic))
 
-four_camera_uv=four_camera*uv
+four_pic_uv=four_pic*uv
 
-camera_uv=abs(ifft2(four_camera_uv))
+pic_uv=abs(ifft2(four_pic_uv))
 
 
 k=[[0,-1,0],[-1,4,-1],[0,-1,0]]
 
 pic_canny=canny(pic)
-camera_lap=convolve(pic_canny, k)
+pic_lap=convolve(pic_canny, k)
 
 pad=pad(k, ((254, 255), (254, 255)), 'constant')
 
 four_pad=fftshift(fft2(pad))
 
-def circ_filt(R):
-    x,y = meshgrid(linspace(-1,1,dimen[0]), linspace(-1,1,dimen[1]))
-    circ=sqrt(x*x+y*y)/R
-    return circ
-    
-def gauss_filt(a):
-    gauss=exp(-a(x*x+y*y))
-    return gauss
-
-
-
-
 subplot(2,2,1)
+title('Original')
 imshow(pic, cmap='gray')
 subplot(2,2,2)
-imshow(canny(pic), cmap='gray')
+title('canny')
+imshow(pic_canny, cmap='gray')
 subplot(2,2,3)
-imshow(camera_uv, cmap='gray')
+title('parabol')
+imshow(pic_uv, cmap='gray')
 subplot(2,2,4)
-imshow(camera_lap, cmap='gray')
+title('Laplaciana')
+imshow(pic_lap, cmap='gray')
+
 
 figure()
 
 imshow(abs(four_pad))
+
+def circ_filt(R):
+    x,y = meshgrid(linspace(-1,1,dimen[0]), linspace(-1,1,dimen[1]))
+    circ=sqrt(x*x+y*y)<R
+    return circ
+    
+def gauss_filt(a):
+    x,y = meshgrid(linspace(-1,1,dimen[0]), linspace(-1,1,dimen[1]))
+    gauss=exp(-a*(x*x+y*y))
+    return gauss
+
+
+soroll=50*rand(dimen[0], dimen[1])-0.5
+
+pic_sor=pic+soroll
+
+pic_sor_four=fftshift(fft2(pic_sor))
+
+pic_sor_circ=abs(ifft2(pic_sor_four*circ_filt(0.5)))
+
+pic_sor_gauss=abs(ifft2(pic_sor_four*gauss_filt(1.0)))
+
+figure()
+subplot(1,2,1)
+title('Filtre Circular')
+imshow(pic_sor_circ, cmap='gray')
+subplot(1,2,2)
+title('Filtre Gaussia')
+imshow(pic_sor_gauss, cmap='gray')
