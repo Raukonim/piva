@@ -25,16 +25,18 @@ class qrcode:
         
                 
         self.data = data.decode('utf-8') #Convertim tot a Unicode
-        self.comp_dades()        
-        self.mode = self.define_mode()
+        self.comp_dades()
+        self.length = len(self.data)
+        self.define_mode()
+        self.check_len()        
+        
         self.version = version
         self.correction = correction
-        self.length = len(self.data)
         self.bin_len = bin(self.length)[2:]
         self.qr_matrix = [[0],[0]]
         self.car_count=9
         self.pad_len=self.car_count_calc()
-        self.check_len()
+
         
     #def caracter_count_indicator(self, version, encoding):
     #    self.car_count=9
@@ -46,11 +48,10 @@ class qrcode:
         """
     def check_len(self):
         a={'0001':7089,'0010':4296,'0100':2953}
-        print a['0010']
-        if (self.length>a[self.mode]):
+        if a[self.mode]<self.length:
             print 'ERROR'
-            #exit()
-            
+            exit()
+
 
     def car_count_calc(self):
         self.pad_len=self.bin_len.zfill(self.car_count)
