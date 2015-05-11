@@ -108,7 +108,7 @@ imshow(pic_sor_gauss, cmap='gray')
 pic_soroll_50=zeros([dimen[0], dimen[1], 50])
 
 for i in range(0,50):
-    pic_soroll_50[:,:,i]=pic+(50*rand(dimen[0], dimen[1])-0.5)
+    pic_soroll_50[:,:,i]=pic+(50*(rand(dimen[0], dimen[1])-0.5))
     #subplot(5,10,i+1)
     #imshow(pic_soroll_50[:,:,i], cmap="gray")
 
@@ -155,39 +155,39 @@ pic_conv_op3=convolve(pic2, opcio3)
 figure()
 subplot(1,3,1)
 title("Rectangular")
-imshow(pic_conv_rect, cmap='gray')
+imshow(abs(pic_conv_rect), cmap='gray')
 subplot(1,3,2)
 title("Triangular")
-imshow(pic_conv_tri, cmap='gray')
+imshow(abs(pic_conv_tri), cmap='gray')
 subplot(1,3,3)
 title("Gaussia")
-imshow(pic_conv_gaus, cmap='gray')
+imshow(abs(pic_conv_gaus), cmap='gray')
 
 
 figure()
 subplot(2,2,1)
 title("Laplacia")
-imshow(pic_conv_lap, cmap='gray')
+imshow(abs(pic_conv_lap), cmap='gray')
 subplot(2,2,2)
 title("Alt1")
-imshow(pic_conv_alt1, cmap='gray')
+imshow(abs(pic_conv_alt1), cmap='gray')
 subplot(2,2,3)
 title("Alt2")
-imshow(pic_conv_alt2, cmap='gray')
+imshow(abs(pic_conv_alt2), cmap='gray')
 subplot(2,2,4)
 title("Nord")
-imshow(pic_conv_nord, cmap='gray')
+imshow(abs(pic_conv_nord), cmap='gray')
 
 figure()
 subplot(1,3,1)
 title("opcio1")
-imshow(pic_conv_op1, cmap='gray')
+imshow(abs(pic_conv_op1), cmap='gray')
 subplot(1,3,2)
 title("opcio2")
-imshow(pic_conv_op2, cmap='gray')
+imshow(abs(pic_conv_op2), cmap='gray')
 subplot(1,3,3)
 title("opcio3")
-imshow(pic_conv_op3, cmap='gray')
+imshow(abs(pic_conv_op3), cmap='gray')
 
 
 
@@ -195,9 +195,20 @@ L1=convolve(pic2, [[-1,0,1],[-2,0,2],[-1,0,1]])
 L2=convolve(pic2, [[1,2,1],[0,0,0],[-1,-2,-1]])
 sobel=sqrt(L1*L1+L2*L2)
 figure()
+title('Sobel')
 imshow(sobel, cmap='gray')
 
 
 R1=convolve(pic2, [[1,0],[0,-1]])
 R2=convolve(pic2, [[0,1],[-1,0]])
-roberts
+roberts=sqrt(R1*R1+R2*R2)
+figure()
+title('Roberts')
+imshow(roberts, cmap='gray')
+
+#%%
+
+xray=imread('xray.png')[:,:,0]
+clown=imread('clown.png')[:,:,0]
+clown_four=fftshift(fft2(clown))
+clown_four_fase=angle(clown_four)
