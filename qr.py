@@ -70,6 +70,11 @@ byte=array([
     [2563,1989,1423,1093],[2699,2099,1499,1139],[289,2213,1579,1219],[2953,2331,1663,1273]
 ])
 
+
+num_indicator=[10,12,14]
+alpha_indicator=[9,11,13]
+byte_indicator=[8,16,16]
+
 #%% qrcode class
 
 class qrcode:
@@ -105,9 +110,6 @@ class qrcode:
         if a[self.mode]<self.length:
             print 'ERROR'
             exit()
-
-    def car_count_calc(self):
-        self.pad_len=self.bin_len.zfill(self.car_count)
     
     def comp_dades(self):
         for c in self.data:
@@ -123,13 +125,15 @@ class qrcode:
             if False in alpha_seq:
                  self.mode = '0100' #Byte
                  self.capacities=byte
+                 self.padding=byte_indicator
             else:
                 self.mode = '0010' #Alpha
                 self.capacities=alpha
+                self.padding=alpha_indicator
         else:
             self.mode = '0001'#Numeric
             self.capacities=num
-    
+            self.padding=num_indicator
     
     def check_version(self):
         for i in range(39,-1, -1):
@@ -137,6 +141,17 @@ class qrcode:
                 self.version=i+1
             else:
                 break
+    
+        def car_count_calc(self):
+            if version<27:
+                if version<10:
+                    self.car_count=self.padding[0]
+                else:
+                    self.car_count=self.padding[1]
+            else:
+                self.car_count=self.padding[2]
+                
+        self.padding_indicator=self.bin_len.zfill(self.car_count)    
     
     def define_correction(self, corr):
         self.correction=corr
