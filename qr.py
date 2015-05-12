@@ -9,6 +9,8 @@ from pylab import *
 
 
 s="HELLO WORLD"
+
+#%% variable declaration
 alphanumeric_table2 = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ $%*+-./:"
 numeric_table ="0123456789"
 alphanumeric_table={
@@ -29,7 +31,7 @@ version: 1-40
 correction: L,M,Q,H
 '''
 #Numerical mode
-num=[ 
+num=array([ 
     [41,34,27,17],[77,63,48,34],[127,101,77,58],[187,149,111,82],
     [255,202,144,106],[322,255,178,139],[370,293,207,154],[461,365,259,202],
     [552,432,312,235],[652,513,364,288],[772,604,427,331],[883,691,489,374],
@@ -40,9 +42,9 @@ num=[
     [3909,3035,2181,1677],[4158,3289,2358,1782],[4417,3486,2473,1897],[4686,3693,2670,2022],
     [4965,3909,2805,2157],[5253,4134,2949,2301],[5529,4343,3081,2361],[5836,4588,3244,2524],
     [6153,4775,3417,2625],[6479,5039,3599,2735],[6743,5313,3791,2927],[7089,5596,3993,3057]
-]
+])
 #Alphaumerical mode
-alpha=[
+alpha=array([
     [25,20,16,10],[47,38,29,20],[77,61,47,35],[114,90,67,50],
     [154,122,87,64],[195,154,108,84],[224,178,125,93],[279,221,157,122],
     [335,262,189,143],[395,311,221,174],[468,366,259,200],[535,419,296,227],
@@ -53,12 +55,12 @@ alpha=[
     [2369,1839,1322,1016],[2520,1994,1429,1080],[2677,2113,1499,1150],[2840,2238,1618,1226],
     [3009,2369,1700,1307],[3183,2506,1787,1394],[3351,2632,1867,1431],[3537,2780,1966,1530],
     [3729,2894,2071,1591],[3927,3054,2181,1658],[4087,3220,2298,1774],[4296,3391,2420,1852]
-]
+])
 #Byte mode
-byte=[
+byte=array([
     [17,14,11,7],[32,26,20,14],[53,42,32,24],[78,62,46,34],
     [106,84,60,44],[134,106,74,58],[154,122,86,64],[192,152,108,84],
-    [230,180,130,98],[271,213,151,119],[321,251,177,137][367,287,203,155],
+    [230,180,130,98],[271,213,151,119],[321,251,177,137],[367,287,203,155],
     [425,331,241,177],[458,362,258,194],[520,412,292,220],[586,450,322,250],
     [644,504,364,280],[718,560,394,310],[792,624,442,338],[858,666,482,382],
     [929,711,509,403],[1003,779,565,439],[1091,857,611,461],[1171,911,661,511],
@@ -66,22 +68,26 @@ byte=[
     [1628,1264,908,698],[1732,1370,982,742],[1840,1452,1030,790],[1952,1538,1112,842],
     [2068,1638,1168,898],[2188,1722,1228,958],[2303,1809,1283,983],[2431,1911,1351,1051],
     [2563,1989,1423,1093],[2699,2099,1499,1139],[289,2213,1579,1219],[2953,2331,1663,1273]
-]
+])
+
+#%% qrcode class
 
 class qrcode:
-    def __init__ (self, data, version=1, correction="L" ):
+    def __init__ (self, data, version=1, correction=0 ):
         
                 
         self.data = data.decode('utf-8') #Convertim tot a Unicode
         self.comp_dades()
         self.length = len(self.data)
         self.define_mode()
-        self.check_len()        
-        
-        self.version = version
+        self.check_len()
         self.correction = correction
+        self.check_version()
+        
+        #self.version = version
+        
         self.bin_len = bin(self.length)[2:]
-        self.qr_matrix = [[0],[0]]
+        self.qr_matrix = array([[0],[0]])
         self.car_count=9
         self.pad_len=self.car_count_calc()
 
@@ -100,7 +106,6 @@ class qrcode:
             print 'ERROR'
             exit()
 
-
     def car_count_calc(self):
         self.pad_len=self.bin_len.zfill(self.car_count)
     
@@ -112,15 +117,26 @@ class qrcode:
                 print "ERROR!"
                 
     def define_mode(self):
-        numeric =[x in numeric_table for x in self.data]
-        alpha = [x in alphanumeric_table2 for x in self.data]
-        if False in numeric:
-            if False in alpha:
+        numeric_seq =[x in numeric_table for x in self.data]
+        alpha_seq = [x in alphanumeric_table2 for x in self.data]
+        if False in numeric_seq:
+            if False in alpha_seq:
                  self.mode = '0100' #Byte
+                 self.capacities=byte
             else:
                 self.mode = '0010' #Alpha
+                self.capacities=alpha
         else:
             self.mode = '0001'#Numeric
+            self.capacities=num
+    
+    
+    def check_version(self):
+        for i in range(39,-1, -1):
+            if self.capacities[i, self.correction]>=self.length :
+                self.version=i+1
+            else:
+                break
     
     def define_correction(self, corr):
         self.correction=corr
@@ -144,11 +160,9 @@ class qrcode:
             z+=y
         print z
     
-    
+#%% 
 hello=qrcode(s)
 
 hello.car_count_calc()
 
 hello.alphanumeric_encoding()
-hello.comp_dades()
-hello.define_mode()
