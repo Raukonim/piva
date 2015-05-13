@@ -27,6 +27,7 @@ from skimage.filter import canny
 
 from scipy.misc import lena
 from scipy.ndimage.filters import convolve
+from scipy.signal import medfilt
 
 
 close("all")
@@ -212,3 +213,9 @@ xray=imread('xray.png')[:,:,0]
 clown=imread('clown.png')[:,:,0]
 clown_four=fftshift(fft2(clown))
 clown_four_fase=angle(clown_four)
+
+
+xray_med=medfilt(xray, kernel_size=7)
+figure()
+imshow(xray_med, cmap='gray')
+
