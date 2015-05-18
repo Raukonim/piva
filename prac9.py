@@ -40,10 +40,11 @@ def filtre_invers(imatge_desenfocada, radi_cercle, constant_k):
     
     
     pic_four=pic_four=fftshift(fft2(imatge_desenfocada))
-    pic_enfoc=abs(ifft2(pic_four/(abs(disc_four)+constant_k)))
+    pic_enfoc_four=(pic_four)/((disc_four)+constant_k)
+    pic_enfoc=abs(ifft2(pic_enfoc_four))
     pic_enfoc/=pic_enfoc.max()
     pic_enfoc*=255
-    pic_enfoc=(pic_enfoc)
+    pic_enfoc=uint8(pic_enfoc)
     
     
     return pic_enfoc
@@ -51,10 +52,10 @@ def filtre_invers(imatge_desenfocada, radi_cercle, constant_k):
 pic=lena()
 dimen=shape(pic)
 
-desenfocada=desenfoc_geometric(pic, 0.2, "desenfoc_geometric.jpeg")
+desenfocada=desenfoc_geometric(pic, 0.05, "desenfoc_geometric.jpeg")
 
 #imshow(desenfocada, cmap='gray')
-
-enfocada=filtre_invers(desenfocada, 0.2, 1)
-
-imshow(enfocada, cmap='gray')
+for i in range(50):
+    enfocada=filtre_invers(desenfocada, 0.05, 2*i)
+    figure()
+    imshow(enfocada, cmap='gray')
