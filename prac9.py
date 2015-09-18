@@ -55,7 +55,29 @@ dimen=shape(pic)
 desenfocada=desenfoc_geometric(pic, 0.05, "desenfoc_geometric.jpeg")
 
 #imshow(desenfocada, cmap='gray')
-for i in range(50):
-    enfocada=filtre_invers(desenfocada, 0.05, 2*i)
-    figure()
+
+#for i in range(50):
+enfocada=filtre_invers(desenfocada, 0.05, 25)
+'''    figure()
     imshow(enfocada, cmap='gray')
+'''
+
+desenfocada_sor=desenfocada*(50*(rand(dimen[0], dimen[1])-0.5))
+
+enfocada_sor=filtre_invers(desenfocada, 0.05, 25)
+
+def wiener(imatge_desenfocada, R, k, sigma2):
+    D=fftshift(fft2(circ_filt(R)))
+    Dc=D.conjugate()
+    hw=Dc/(abs(D*Dc)+(k*sigma2))
+    im_four=fftshift(fft2(imatge_desenfocada))
+    filt_four=im_four*hw
+    filt=abs(ifft2(filt_four))
+    filt/=filt.max()
+    filt*=255    
+    imshow(filt, cmap='gray')
+    return filt
+
+enfocada_w=wiener(desenfocada_sor,0.05, 80, 1)
+
+#*(50*(rand(dimen[0], dimen[1])-0.5))

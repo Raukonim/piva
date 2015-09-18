@@ -39,7 +39,7 @@ figure(0)
 imshow(uint8(binar), cmap="gray")
 
 
-binar=medfilt(L,i)>L
-figure(i)
-imshow
-ssim(uint8(L), uint8(binar), win_size=i)
+#binar=medfilt(L,i)>L
+#figure(i)
+#imshow
+print ssim(uint8(L), uint8(binar))
